@@ -3,7 +3,7 @@ from visual import val
 from lyrics import lyl
 
 app=Flask(__name__)
-
+server=app.app
 @app.route('/')
 def home():
     print("Hey")

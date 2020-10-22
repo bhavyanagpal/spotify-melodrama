@@ -10,9 +10,10 @@ import types
 from matplotlib import pyplot as plt
 from matplotlib_venn import venn3, venn3_circles
 from matplotlib_venn import venn2, venn2_circles, venn2_unweighted
-
+import re
 
 # for acessing private playlists
+
 scope = 'playlist-read-private'
 username = '8eia8ggl4ipbhouhun62o9y8i'
 client_id = '3cb41450f466404399f3e0de3e4c89f2'
@@ -42,24 +43,24 @@ spotify.current_user_recently_played = types.MethodType(current_user_recently_pl
 
 # creating .json file
 recentsongs = spotify.current_user_recently_played(limit=50)
-out_file = open("recentsongs.json", "w")
-out_file.write(json.dumps(recentsongs, sort_keys=True, indent=2))
-out_file.close()
 
 
-f = open('recentsongs.json',)
-data = json.load(f)
-f.close()
+
+
 track_id = []
 track_name = []
 album_name = []
 artist_name = []
+track_time = []
 # creating arrays for storing id and name
 for i in recentsongs['items']:
     track_id.append(i['track']['id'])
     track_name.append(i['track']['name'])
     album_name.append(i['track']['album']['name'])
     artist_name.append(i['track']['artists'][0]['name'])
+    temp = i['played_at']
+    track_time.append(re.sub('.[0-9].[000-999]Z', '', temp))
+
 # accessing features of all 50 tracks
 features = []
 tracks = {}
@@ -67,14 +68,16 @@ for track in track_id:
     features.append(sp.audio_features(track))
 
 # initialising all tracks with corresponding feature values and storing in a dictionary
-for i in range(0, 49):
+for i in range(len(track_name)):
     tracks[i+1] = {}
-for i in range(0, 49):
+for i in range(len(track_name)):
     tracks[i+1]['number'] = i+1
+    tracks[i+1]['time'] = track_time[i]
     tracks[i+1]['name'] = track_name[i]
     tracks[i+1]['id'] = track_id[i]
     tracks[i+1]['album'] = album_name[i]
     tracks[i+1]['artist'] = artist_name[i]
+    #print(tracks[4]['artist'])
     tracks[i+1]['acousticness'] = features[i][0]['acousticness']
     tracks[i+1]['danceability'] = features[i][0]['danceability']
     tracks[i+1]['energy'] = features[i][0]['energy']
@@ -88,7 +91,7 @@ for i in range(0, 49):
     tracks[i+1]['popularity'] = pop['popularity']
 
 # creating dictionary to convert into dataframe
-feature = ['number', 'name', 'id', 'album', 'artist', 'acousticness',
+feature = ['number', 'time', 'name', 'id', 'album', 'artist', 'acousticness',
            'danceability', 'energy', 'instrumentalness', 'liveness', 'loudness',
            'speechiness', 'tempo', 'valence', 'popularity']
 dic_df = {}
@@ -96,9 +99,9 @@ dic_df = {}
 # initialising dictionary
 for x in feature:
     dic_df[x] = []
-for j in range(1, 50):
+for j in range( len(track_name)):
     for x in feature:
-        dic_df[x].extend([tracks[j][x]])
+        dic_df[x].extend([tracks[j+1][x]])
 
 # creating dataframe from dictionary
 dataframe = pd.DataFrame.from_dict(dic_df).drop_duplicates(subset='name')
@@ -118,12 +121,14 @@ for num in valence_vals:
 venn2_unweighted(subsets=(less_count, more_count, middle_count),
                  set_labels=('Low Spirit', 'High Spirit'), set_colors=('navy', 'lime'),
                  alpha=0.5)
-dataframe.plot.line(x='number', y=['danceability', 'energy', 'valence'])
+dataframe.plot.line(x='time', y=['danceability', 'energy', 'valence'])
+plt.xticks(rotation=90)
 plt.show()
 
 # if the graph is erratic, thay maybe because of streaming of a particular artist/ album,
 # since an album contains a mixture of sad and energetic songs. so we take a look
 # at the number of unique artists and albums in the history :
 
-print(dataframe['album'].value_counts(ascending=False))
-print(dataframe['artist'].value_counts(ascending=False))
+def val():
+    return (dataframe['album'].value_counts(ascending=False),dataframe['artist'].value_counts(ascending=False))
+

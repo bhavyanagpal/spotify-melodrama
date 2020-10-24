@@ -1,38 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Spotify Mood Analyser</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;800&display=swap"
-    rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>visual </title>
+    <style>
+        @font-face {
+            font-family: 'Gotham';
+            src: url('fonts/Gotham-Bold.eot');
+            /* IE9 Compat Modes */
+            src: url('fonts/Gotham-Bold.eot?#iefix') format('embedded-opentype'),
+                /* IE6-IE8 */
+                url('fonts/Gotham-Bold.woff') format('woff'),
+                /* Modern Browsers */
+                url('fonts/Gotham-Bold.ttf') format('truetype'),
+                /* Safari, Android, iOS */
+                url('fonts/Gotham-Bold.svg#svgFontName') format('svg');
+            /* Legacy iOS */
+            font-weight: 800;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        html {
+            overflow: hidden;
+        }
+
+        body {
+            overflow: hidden;
+            font-family: 'Gotham', sans-serif;
+            background-color: #823655;
+            /*background-image: linear-gradient(315deg, #f5d056 0%, #51fd42 94%);*/
+            height: 150vh;
+            margin: 0 auto;
+        }
+    </style>
 </head>
+
 <body>
     <header>
         <nav>
             <ul class="nav-links">
-                <li><img src="https://raw.githubusercontent.com/aryamansharma01/Spotify/master/Spotifylogo.png " alt="Spotify icon" width="220" height="70">
-                   Mood Analyser</li>
+                <li><img src="https://raw.githubusercontent.com/aryamansharma01/Spotify/master/Spotifylogo.png "
+                        alt="Spotify icon" width="220" height="70">
+                    Mood Analyser</li>
             </ul>
         </nav>
     </header>
-    <main>
-        <section class="presentation">
-            <div class="introduction">
-                <div class="intro-text">
-                    <h1><a><span>Connect your Spotify account</span><span> </h1></a>
-                    <p>
-                        and see how you're feeling now!
-                    </p>
-                </div>
-                <div class="cta">
-                <button class="cta-sign" href="/visual">Mood Visualiser</button>
-                <button class="cta-sign" href="/lyrics">Lyrics Analyser</button>
-                </div>
-            </div>
-        </section>
-    </main>
+    <iframe src="" frameborder="0", src=plot></iframe>
 
 </body>
+
 </html>

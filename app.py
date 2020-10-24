@@ -1,21 +1,25 @@
-from flask import Flask, render_template
-from visual import val
-from lyrics import lyl
-
+from flask import Flask
+from flask import render_template, redirect
+from visual import vis 
+from lyrics import initial
 app=Flask(__name__)
-server=app.app
+
+
+
 @app.route('/')
 def home():
     print("Hey")
     return render_template("landing.html")
 
 @app.route('/visual')
-def vis():
-    return val
+def visual():
+    vis()
+    return redirect('/')
 
 @app.route('/lyrics')
-def lyr():
-    return lyl
+def lyr():  
+    initial()
+    return redirect('/')
 
-if __name__=="__main":
+if __name__=="__main__":
     app.run(debug=True, use_reloader=False)    
